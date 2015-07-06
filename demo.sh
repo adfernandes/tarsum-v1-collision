@@ -10,7 +10,12 @@ export GOPATH=$(pwd)
 go fmt     -x demo
 go install -v demo
 
-./bin/demo < demo/hello1.tar
-./bin/demo < demo/hello2.tar
+pushd demo
+./create.sh
+popd
+
+for FILE in demo/hello?.tar ; do
+	./bin/demo < "$FILE"
+done
 
 rm -rf bin/* pkg/*
