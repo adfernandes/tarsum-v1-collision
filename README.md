@@ -4,6 +4,27 @@ This writeup corresponds to tag `v1.7.0` of the [TarSum Checksum Specification](
 
 **tl;dr** The `v1` specification of the TarSum algorithm is insecure and makes it trivial to construct multiple hash collisions. This is because TarSum can be viewed as a flawed implementation of a [Merkle–Damgård construction](https://en.wikipedia.org/wiki/Merkle%E2%80%93Damg%C3%A5rd_construction).
 
+## Update
+
+After contacting the security team at Docker with this result, I received the following response in early July, 2015:
+
+> Thank you for your report. We understand and acknowledge that the TarSum algorithm is flawed. The v2 image format present in newer versions of Docker is designed not to be dependent on TarSum, but to use sha256 hashes of the tar itself. The TarSum algorithm is in the process of being on a track to depreciation with the v1 format.
+
+followed by
+
+> I'd like to point you to some resources regarding the effort to eliminate tarsum. We consider tarsum depreciated and are no longer seeking to spot-fix its various flaws and are committed to offering a quick and efficient replacement.
+>
+> https://github.com/docker/docker/issues/9719
+> https://github.com/docker/distribution/pull/238
+> https://github.com/docker/docker/pull/11271
+> https://github.com/docker/docker/pull/14067
+
+Another response a couple of weeks later said
+
+> [...] it's not been a huge secret that TarSum is insecure. Folks at Docker just did not want to broadcast it because there wasn't a solution yet. As of today TarSum is only used for local build caching, not registry pushes and subsequent pulls.
+
+So there you have it!
+
 ## More Detail
 
 To a large extent, the insecurity of TarSum is best paraphrased by[this comment of Docker issue 9719](https://github.com/docker/docker/issues/9719#issuecomment-67922295).
